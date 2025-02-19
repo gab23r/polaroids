@@ -1,4 +1,4 @@
-# DataFrame Extension for Polars
+# Polars Generic  
 
 This package provides a generic extension to Polars `DataFrame`, allowing schema validation and custom validation logic through class-based definitions.
 
@@ -9,7 +9,6 @@ This package provides a generic extension to Polars `DataFrame`, allowing schema
 - **Improved Typing for Rows**: Provides better type safety for `rows(named=True)`.
 
 ## Installation
-This package depends on `polars`. Install it with:
 
 ```sh
 pip install polaric

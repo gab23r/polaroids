@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Validate you Generic polars dataframes"
 readme = "README.md"
 authors = [
-    { name = "gabriel", email = "gabriel.g.robin@airbus.com" }
+    { name = "gabriel", email = "106454081+gab23r@users.noreply.github.com" }
 ]
 requires-python = ">=3.11"
 dependencies = [
