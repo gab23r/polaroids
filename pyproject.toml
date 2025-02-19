@@ -1,0 +1,30 @@
+[project]
+name = "polaric"
+version = "0.1.0"
+description = "Validate you Generic polars dataframes"
+readme = "README.md"
+authors = [
+    { name = "gabriel", email = "gabriel.g.robin@airbus.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "polars>=1.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.29.5",
+    "pytest>=8.3.4",
+    "ruff>=0.9.6",
+    "pyright>=1.1.394",
+]
+
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+typeCheckingMode = "standard"
