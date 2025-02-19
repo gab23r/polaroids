@@ -21,13 +21,19 @@ Schemas are defined using Python's `TypedDict`:
 
 ```python
 from typing import TypedDict
-from polaric import DataFrame
+from polaric import DataFrame, Field
 import polars as pl
 
 class BasicSchema(TypedDict):
-    a: int
+    a: Annotated[pl.Int64, Field(
+        sorted="ascending",
+        coerce=True,
+        unique=True,
+        checks=[lambda d: d.ge(0)],
+    )]
+    b: str
 
-df = pl.DataFrame({"a": [0, 1]})
+df = pl.DataFrame({"a": [0, 1], "b": ["a", "b"]})
 basic_df = DataFrame[BasicSchema](df)
 basic_df.validate()  # Ensures schema correctness
 ```

@@ -21,6 +21,7 @@ dev = [
     "pytest>=8.3.4",
     "ruff>=0.9.6",
     "pyright>=1.1.394",
+    "pre-commit>=4.1.0",
 ]
 
 
@@ -28,3 +29,25 @@ dev = [
 venvPath = "."
 venv = ".venv"
 typeCheckingMode = "standard"
+
+
+
+[tool.ruff]
+
+include = ["src/**/*.py"]
+
+# Enable the numpy docstring convention
+lint.extend-select = ["D"]
+
+
+[tool.ruff.lint.extend-per-file-ignores]
+"tests/*" = ["D"]
+# "*/test_*.py" = ["D101"]
+
+
+[tool.ruff.lint.pydocstyle]
+# Configure pydocstyle settings to enforce NumPy style docstrings
+convention = "numpy"
+
+[tool.ruff.format]
+docstring-code-format = true
