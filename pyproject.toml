@@ -32,7 +32,7 @@ typeCheckingMode = "standard"
 
 
 [tool.ruff]
-
+line-length = 100
 include = ["src/**/*.py"]
 
 lint.extend-select = [
