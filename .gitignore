@@ -11,3 +11,7 @@ wheels/
 
 #vscode
 .vscode/settings.json
+
+
+# mkdocs
+site/
