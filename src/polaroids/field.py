@@ -11,19 +11,19 @@ import polars as pl
 class Field(TypedDict, total=False):
     """TypedDict representing the configuration for a field in a schema.
 
-    Parameters
+    Attributes
     ----------
-    primary_key
+    primary_key : bool
         Indicates whether the field is a primary key.
-    unique
+    unique : bool
         Indicates whether the field values must be unique.
     sorted : {'descending', 'ascending'}
         Specifies the sorting order for the field.
-    coerce
+    coerce : bool
         Indicates whether to coerce the field values to the specified type.
-    default
+    default : pl.Expr
         The default value for the field.
-    checks
+    checks : list[Callable[[pl.Expr], pl.Expr]]
         A list of validation checks for the field.
     """
 

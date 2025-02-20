@@ -84,6 +84,9 @@ class DataFrame(pl.DataFrame, Generic[S]):
         If the DataFrame does not conform to the expected schema.
     """
 
+    def __init__(self, df: pl.DataFrame):
+        super().__init__(df)
+
     def validate(self: Self) -> Self:
         """Validate the dataframe based on the annotations of the TypedDict.
 

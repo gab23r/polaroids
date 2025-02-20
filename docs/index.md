@@ -19,7 +19,7 @@ pip install polaroids
 ### Defining a Schema
 Schemas are defined using Python's `TypedDict`:
 
-```python
+```py
 from typing import Annotated, TypedDict
 from polaroids import DataFrame, Field
 import polars as pl
@@ -36,15 +36,15 @@ class BasicSchema(TypedDict):
 df = pl.DataFrame({"a": [0.0, 1.0], "b": [None, 0]})
 
 DataFrame[BasicSchema](df).validate()
-shape: (2, 2)
-┌─────┬──────┐
-│ a   ┆ b    │
-│ --- ┆ ---  │
-│ i64 ┆ i64  │
-╞═════╪══════╡
-│ 0   ┆ null │
-│ 1   ┆ 0    │
-└─────┴──────┘
+# shape: (2, 2)
+# ┌─────┬──────┐
+# │ a   ┆ b    │
+# │ --- ┆ ---  │
+# │ i64 ┆ i64  │
+# ╞═════╪══════╡
+# │ 0   ┆ null │
+# │ 1   ┆ 0    │
+# └─────┴──────┘
 ```
 
 ### Get typing goodies !
