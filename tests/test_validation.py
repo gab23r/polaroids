@@ -1,11 +1,11 @@
 from typing import Annotated, Self, TypedDict
 
 import pytest
-from polaric import DataFrame
+from polaroids import DataFrame
 import polars as pl
 
-from polaric import Field
-from polaric.exceptions import ValidationError
+from polaroids import Field
+from polaroids.exceptions import ValidationError
 unique=True
 
 class BasicSchema(TypedDict):

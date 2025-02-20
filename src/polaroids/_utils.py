@@ -4,7 +4,7 @@ from collections.abc import Mapping
 from typing import Any, Literal, TypeVar, get_type_hints
 import polars as pl
 from polars._typing import PolarsDataType
-from polaric.exceptions import ValidationError
+from polaroids.exceptions import ValidationError
 
 S = TypeVar("S", bound=Mapping)
 
