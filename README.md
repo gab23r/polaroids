@@ -14,6 +14,10 @@ This package provides a generic extension to Polars `DataFrame`, allowing data v
 pip install polaroids
 ```
 
+## Documentation
+
+📖 **Read the full documentation here:** [Project Documentation](https://gab23r.github.io/polaroids/)
+
 ## Usage
 
 ### Defining a Schema
