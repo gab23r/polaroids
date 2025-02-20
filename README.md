@@ -1,4 +1,4 @@
-# Polars on Steroiods!  
+# Polars on Steroids!  
 
 This package provides a generic extension to Polars `DataFrame`, allowing data validation and typing goodies.
 
