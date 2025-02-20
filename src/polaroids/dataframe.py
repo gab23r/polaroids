@@ -117,26 +117,24 @@ class DataFrame(pl.DataFrame, Generic[S]):
 
         # Nullable
         if non_nullable_cols := self._metadata.filter(~pl.col("nullable"))["column"].to_list():
-            is_null = (
+            if is_null := (
                 self.select(pl.col(non_nullable_cols).is_null().any())
                 .transpose(include_header=True, column_names=["is_null"])
                 .filter(pl.col("is_null"))
                 .get_column("column")
                 .to_list()
-            )
-            if is_null:
+            ):
                 raise ValidationError(f"The following columns contains nulls: {is_null}.")
 
         # Uniqueness
         if unique_cols := self._metadata.filter(pl.col("unique"))["column"].to_list():
-            is_duplicated = (
+            if is_duplicated := (
                 self.select(pl.col(unique_cols).is_duplicated().any())
                 .transpose(include_header=True, column_names=["is_duplicated"])
                 .filter(pl.col("is_duplicated"))
                 .get_column("column")
                 .to_list()
-            )
-            if is_duplicated:
+            ):
                 raise ValidationError(
                     f"The following columns must be unique but contain duplicates: {is_duplicated}."
                 )
