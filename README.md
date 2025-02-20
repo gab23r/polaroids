@@ -51,7 +51,7 @@ shape: (2, 2)
 └─────┴──────┘
 ```
 
-### Get typing goodies !
+### Get typing goodies!
 Get your TypedDict back when you leave polars ✅:
 
 ![alt text](docs/img/typing_completion.png)

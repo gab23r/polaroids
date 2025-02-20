@@ -47,7 +47,7 @@ DataFrame[BasicSchema](df).validate()
 # └─────┴──────┘
 ```
 
-### Get typing goodies !
+### Get typing goodies!
 Get your TypedDict back when you leave polars ✅:
 
 ![alt text](img/typing_completion.png)
