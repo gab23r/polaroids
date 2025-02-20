@@ -17,4 +17,3 @@ class DataFrame(pl.DataFrame, Generic[S]):
 
     @overload
     def rows(self, *, named: Literal[True]) -> list[S]: ...  # type: ignore
-

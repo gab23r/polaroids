@@ -4,6 +4,9 @@ import pytest
 from polaric import DataFrame
 import polars as pl
 
+from polaric import Field
+from polaric.exceptions import ValidationError
+unique=True
 
 class BasicSchema(TypedDict):
     a: int
@@ -35,12 +38,12 @@ def test_custom_validation():
 def test_is_unique():
 
     class Schema(TypedDict):
-        a: Annotated[int, "is_unique"]
+        a: Annotated[int, Field(unique=True)]
         b: int
 
     df = pl.DataFrame({"a": [0, 1], "b": [0, 1]})
     DataFrame[Schema](df).validate()
 
-    with pytest.raises(AssertionError, match="contains duplicated values"):
+    with pytest.raises(ValidationError, match="contain duplicates"):
         df = pl.DataFrame({"a": [0, 0], "b": [0, 1]})
         DataFrame[Schema](df).validate()
