@@ -31,22 +31,20 @@ venv = ".venv"
 typeCheckingMode = "standard"
 
 
-
 [tool.ruff]
 
 include = ["src/**/*.py"]
 
-# Enable the numpy docstring convention
-lint.extend-select = ["D"]
+lint.extend-select = [
+    "D", # Doctrings
+]
 
 
 [tool.ruff.lint.extend-per-file-ignores]
 "tests/*" = ["D"]
-# "*/test_*.py" = ["D101"]
-
+"**/__init__.py" = ["D104"]
 
 [tool.ruff.lint.pydocstyle]
-# Configure pydocstyle settings to enforce NumPy style docstrings
 convention = "numpy"
 
 [tool.ruff.format]
