@@ -32,5 +32,9 @@ jobs:
         run: uv sync --group docs
   
       - name: Deploy to GitHub Pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # Use the token from secrets
         run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           uv run mkdocs gh-deploy --force
