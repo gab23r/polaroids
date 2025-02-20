@@ -1,6 +1,6 @@
 from typing import TypedDict
 
-from polaric import DataFrame
+from polaroids import DataFrame
 import polars as pl
 
 

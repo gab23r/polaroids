@@ -9,9 +9,9 @@ from typing import (
     TypeVar,
 )
 import polars as pl
-from polaric import _utils
-from polaric.exceptions import ValidationError
-from polaric.field import Field
+from polaroids import _utils
+from polaroids.exceptions import ValidationError
+from polaroids.field import Field
 
 
 S = TypeVar("S", bound=Mapping)

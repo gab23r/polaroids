@@ -11,7 +11,7 @@ This package provides a generic extension to Polars `DataFrame`, allowing schema
 ## Installation
 
 ```sh
-pip install polaric
+pip install polaroids
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ Schemas are defined using Python's `TypedDict`:
 
 ```python
 from typing import TypedDict
-from polaric import DataFrame, Field
+from polaroids import DataFrame, Field
 import polars as pl
 
 class BasicSchema(TypedDict):

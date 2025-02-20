@@ -335,7 +335,7 @@ wheels = [
 ]
 
 [[package]]
-name = "polaric"
+name = "polaroids"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
