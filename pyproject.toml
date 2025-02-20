@@ -42,6 +42,7 @@ lint.extend-select = [
 
 [tool.ruff.lint.extend-per-file-ignores]
 "tests/*" = ["D"]
+"**/__init__.py" = ["D104"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
