@@ -1,4 +1,4 @@
-from typing import Self, TypedDict
+from typing import Annotated, Self, TypedDict
 
 import pytest
 from polaric import DataFrame
@@ -31,3 +31,16 @@ def test_custom_validation():
     with pytest.raises(AssertionError, match="contains negative values"):
         df = pl.DataFrame({"a": [-1, 1]})
         BasicSchemaDataFrame(df).validate()
+
+def test_is_unique():
+
+    class Schema(TypedDict):
+        a: Annotated[int, "is_unique"]
+        b: int
+
+    df = pl.DataFrame({"a": [0, 1], "b": [0, 1]})
+    DataFrame[Schema](df).validate()
+
+    with pytest.raises(AssertionError, match="contains duplicated values"):
+        df = pl.DataFrame({"a": [0, 0], "b": [0, 1]})
+        DataFrame[Schema](df).validate()
