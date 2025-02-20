@@ -1,12 +1,12 @@
-# Polars Generic  
+# Polars on Steroiods!  
 
-This package provides a generic extension to Polars `DataFrame`, allowing schema validation and custom validation logic through class-based definitions.
+This package provides a generic extension to Polars `DataFrame`, allowing data validation and typing goodies.
 
 ## Features
 - **Generic DataFrame**: Ensures type safety using Python's `TypedDict`.
-- **Schema Validation**: Automatically checks that the DataFrame conforms to the expected schema.
-- **Custom Validation Hooks**: Define additional validation methods prefixed with `check_`.
-- **Improved Typing for Rows**: Provides better type safety for `rows(named=True)`.
+- **Data Validation**: Checks that the DataFrame conforms to the expected schema.
+- **Custom Checks**: Leverage the power of polars expression to add custom checks.
+- **Lightweight**: No dependencies (except polars)!
 
 ## Installation
 
@@ -20,49 +20,56 @@ pip install polaroids
 Schemas are defined using Python's `TypedDict`:
 
 ```python
-from typing import TypedDict
+from typing import Annotated, TypedDict
 from polaroids import DataFrame, Field
 import polars as pl
 
 class BasicSchema(TypedDict):
-    a: Annotated[pl.Int64, Field(
+    a: Annotated[int, Field(
         sorted="ascending",
         coerce=True,
         unique=True,
         checks=[lambda d: d.ge(0)],
     )]
-    b: str
+    b: int | None
 
-df = pl.DataFrame({"a": [0, 1], "b": ["a", "b"]})
-basic_df = DataFrame[BasicSchema](df)
-basic_df.validate()  # Ensures schema correctness
+df = pl.DataFrame({"a": [0.0, 1.0], "b": [None, 0]})
+
+DataFrame[BasicSchema](df).validate()
+shape: (2, 2)
+┌─────┬──────┐
+│ a   ┆ b    │
+│ --- ┆ ---  │
+│ i64 ┆ i64  │
+╞═════╪══════╡
+│ 0   ┆ null │
+│ 1   ┆ 0    │
+└─────┴──────┘
 ```
+
+### Get typing goodies !
+Get your TypedDict back when you leave polars ✅:
+
+![alt text](static/typing_completion.png)
+
 
 ### Adding Custom Validations
 Extend `DataFrame` and define validation methods prefixed with `check_`:
 
 ```python
 class BasicSchemaDataFrame(DataFrame[BasicSchema]):
-    def check_a_is_positive(self) -> Self:
-        assert self.select(pl.col("a").ge(0).all()).item(), "Column a contains negative values!"
-        return self
+    def check_a_greater_then_b(self) -> None:
+        assert self.select((pl.col("a") >= pl.col("b")).all()).item(), "a should be greater the b"
 
 # Example usage
-df = pl.DataFrame({"a": [0, 1]})
-basic_df = BasicSchemaDataFrame(df)
-basic_df.validate()  # Passes validation
+BasicSchemaDataFrame(df).validate() # Passes validation
 
 # This will raise an AssertionError
-df_invalid = pl.DataFrame({"a": [-1, 1]})
-BasicSchemaDataFrame(df_invalid).validate()
-```
-
-### Get typing goodies !
-Ensure row retrieval maintains proper types:
-
-```python
-row = basic_df.rows(named=True)[0]
-# row is a typedDict !
+(
+    pl.DataFrame({"a": [5, 6], "b": [None, 10]})
+    .pipe(BasicSchemaDataFrame)
+    .validate() # This will raise 💣 !
+)
 ```
 
 
