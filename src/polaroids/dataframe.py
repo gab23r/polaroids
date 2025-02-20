@@ -23,10 +23,87 @@ class _Metadata(Field):
 
 
 class DataFrame(pl.DataFrame, Generic[S]):
-    """No-op class to make Polars DataFrames generics."""
+    """A generic Polars DataFrame with schema validation.
+
+    This class extends `polars.DataFrame` to support schema validation using
+    Python's type annotations and metadata. It ensures that the DataFrame
+    conforms to a specified schema, enforcing constraints such as sorting,
+    uniqueness, and custom validation checks.
+
+    Parameters
+    ----------
+    df : polars.DataFrame
+        The input DataFrame to be validated.
+
+    Type Parameters
+    ---------------
+    S : TypedDict
+        The schema definition as a `TypedDict`, where fields can have metadata
+        such as sorting, uniqueness, coercion, and validation checks.
+
+    Methods
+    -------
+    validate()
+        Validates the DataFrame against the expected schema.
+
+    Example
+    -------
+    ```python
+    from typing import Annotated, TypedDict
+    from polaroids import DataFrame, Field
+    import polars as pl
+
+
+    class BasicSchema(TypedDict):
+        a: Annotated[
+            int,
+            Field(
+                sorted="ascending",
+                coerce=True,
+                unique=True,
+                checks=[lambda d: d.ge(0)],  # Ensures values are non-negative
+            ),
+        ]
+        b: int | None  # Optional integer column
+
+
+    df = pl.DataFrame({"a": [0.0, 1.0], "b": [None, 0]})
+    validated_df = DataFrame[BasicSchema](df).validate()
+    ```
+
+    The `validate()` method ensures that:
+    - The schema of `df` matches the TypedDict (with possible coercion).
+    - Column `a` is sorted in ascending order.
+    - Column `a` only contains non-negative values.
+    - Column `a` has unique values.
+    - Column `b` allows `None` values.
+
+    Raises
+    ------
+    ValidationError
+        If the DataFrame does not conform to the expected schema.
+    """
 
     def validate(self: Self) -> Self:
-        """Validate the dataframe."""
+        """Validate the dataframe based on the annotations of the TypedDict.
+
+        This function performs various validation checks, including:
+
+        - **Schema equality**: Ensures that the DataFrame matches the expected schema.
+        - **Primary key uniqueness**: Verifies that primary key columns contain unique values.
+        - **Unique values**: Checks for unique constraints on specific columns.
+        - **Nullable columns**: Ensures that required columns do not contain null values.
+        - **Sortedness**: Validates whether specified columns are sorted in the expected order.
+        - **Custom checks**: Applies user-defined validation functions.
+
+        Returns
+        -------
+            Self: The validated DataFrame.
+
+        Raises
+        ------
+            ValidationError: If any validation check fails.
+        """
         # Coerce
         if coerce_cols := self._metadata.filter(pl.col("coerce"))["column"].to_list():
             self._df = self.cast(

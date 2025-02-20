@@ -23,6 +23,11 @@ dev = [
     "pyright>=1.1.394",
     "pre-commit>=4.1.0",
 ]
+docs = [
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.6.5",
+    "mkdocstrings[python]>=0.28.1",
+]
 
 
 [tool.pyright]

@@ -50,7 +50,7 @@ shape: (2, 2)
 ### Get typing goodies !
 Get your TypedDict back when you leave polars ✅:
 
-![alt text](docs/img/typing_completion.png)
+![alt text](img/typing_completion.png)
 
 
 ### Adding Custom Validations
