@@ -86,6 +86,41 @@ class DataFrame(pl.DataFrame, Generic[S]):
     def __init__(self, df: pl.DataFrame):
         super().__init__(df)
 
+    def __getattribute__(self, name: str):
+        """Dynamically delegate attribute access to the underlying `polars.DataFrame`.
+
+        This method intercepts attribute lookups that are not found on `DataFrame`
+        and attempts to retrieve them from the `polars.DataFrame` superclass, the restult is converted back into an instance
+        of this `DataFrame` subclass.
+
+        We intercept only on subset of polars.DataFrame methods, we intercept only methods that might not change the schema.
+        """
+        if name in [
+            "head",
+            "limit",
+            "filter",
+            "slice",
+            "sort",
+            "drop_nulls",
+            "unique",
+            "fill_null",
+            "fill_nan",
+            "with_columns",
+            "select",
+            "cast",
+        ]:
+            attr = getattr(super(), name)  # Get the attribute from `pl.DataFrame`
+
+            def wrapper(*args, **kwargs):
+                result = attr(*args, **kwargs)  # Call the method
+                new = self.__class__(result)
+                setattr(new, "__orig_class__", getattr(self, "__orig_class__", None))
+                return new
+
+            return wrapper
+
+        return super().__getattribute__(name)  # Get the original method from `pl.DataFrame`
+
     def validate(self: Self) -> Self:
         """Validate the dataframe based on the annotations of the TypedDict.
 
@@ -108,9 +143,7 @@ class DataFrame(pl.DataFrame, Generic[S]):
         """
         # Coerce
         if coerce_cols := self._metadata.filter(pl.col("coerce"))["column"].to_list():
-            self._df = self.cast(
-                {c: dtype for c, dtype in self._schema.items() if c in coerce_cols}
-            )._df
+            self = self.cast({c: dtype for c, dtype in self._schema.items() if c in coerce_cols})  # type: ignore
 
         _utils.assert_schema_equal(self._schema, self.schema)
 
@@ -156,7 +189,7 @@ class DataFrame(pl.DataFrame, Generic[S]):
                     raise ValidationError(
                         f"Column {column!r} is not sorted as expected (descending={descending})."
                     )
-            self._df = self.with_columns(pl.col(columns).set_sorted(descending=descending))._df
+            self = self.with_columns(pl.col(columns).set_sorted(descending=descending))  # type: ignore
 
         return self
 

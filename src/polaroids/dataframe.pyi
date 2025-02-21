@@ -20,7 +20,9 @@ from polars._typing import (
     IntoExprColumn,
     IntoExpr,
     UniqueKeepStrategy,
-    FillNullStrategy
+    FillNullStrategy,
+    PolarsDataType,
+    PythonDataType,
 )
 
 
@@ -120,7 +122,8 @@ class DataFrame(pl.DataFrame, Generic[S]):
         include_key: bool = False,
         unique: bool = False,
     ) -> dict[Any, Any]: ...
-
+    
+    def to_dicts(self) -> list[S]: ... # type: ignore
 
     def head(self: Self, n: int = 5) -> Self: ...
     def limit(self: Self, n: int = 5) -> Self: ...
@@ -136,7 +139,6 @@ class DataFrame(pl.DataFrame, Generic[S]):
         **constraints: Any,
     ) -> Self: ...
     def slice(self, offset: int, length: int | None = None) -> Self: ...
-    def take(self: Self, indices: IntoExprColumn) -> Self: ...
     def sort(
         self,
         by: IntoExpr | Iterable[IntoExpr],
@@ -164,5 +166,24 @@ class DataFrame(pl.DataFrame, Generic[S]):
         limit: int | None = None,
         *,
         matches_supertype: bool = True,
-    ) -> DataFrame: ...
-    def fill_nan(self, value: Expr | int | float | None) -> DataFrame: ...
+    ) -> Self: ...
+    def fill_nan(self, value: Expr | int | float | None) -> Self: ...
+    def select(
+        self: Self, *exprs: IntoExpr | Iterable[IntoExpr], **named_exprs: IntoExpr
+    ) -> Self: ...
+    def with_columns(
+        self,
+        *exprs: IntoExpr | Iterable[IntoExpr],
+        **named_exprs: IntoExpr,
+    ) -> Self: ...
+    def cast(
+        self: Self,
+        dtypes: (
+            Mapping[
+                ColumnNameOrSelector | PolarsDataType, PolarsDataType | PythonDataType
+            ]
+            | PolarsDataType
+        ),
+        *,
+        strict: bool = True,
+    ) -> Self: ...
