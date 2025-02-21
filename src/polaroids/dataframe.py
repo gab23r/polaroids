@@ -191,6 +191,20 @@ class DataFrame(pl.DataFrame, Generic[S]):
                     )
             self = self.with_columns(pl.col(columns).set_sorted(descending=descending))  # type: ignore
 
+        # Custom checks
+        for column, checks in (
+            self._metadata.select("column", "checks").filter(pl.col("checks").is_not_null()).rows()
+        ):
+            result = self.select(
+                [check(pl.col(column)).alias(str(i)) for i, check in enumerate(checks)]
+            )
+            for i, check_ok in result.select(pl.all().all()).row(0, named=True).items():
+                if not check_ok:
+                    df_failure = self.filter(result.get_column(i))
+                    raise ValidationError(
+                        f"Check number {i} on column {column!r} fails:\n{df_failure}."
+                    )
+
         return self
 
     @cached_property
