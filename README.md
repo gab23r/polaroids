@@ -54,13 +54,13 @@ shape: (2, 2)
 
 ### Comparison with Alternatives
 
-Compared to Pandera and Patito, Polaroids' typing system is based on TypedDict rather than Pydantic's BaseModel.
+Compared to Pandera and Patito, Polaroids' typing system is based on **TypedDict** rather than Pydantic's BaseModel.
 
-Pydantic is a great tool, but when validating large Polars DataFrames, it's preferable to use Polars expressions for efficiency. Given this, a dependency on Pydantic is not particularly relevant.
+Pydantic is a great tool, but when validating large Polars DataFrames, it's preferable to use **Polars expressions** for efficiency. Given this, a dependency on Pydantic is not particularly relevant.
 
-Moreover, to benefit from typing with Pandera or Patito, you need to instantiate Pydantic objects, which introduces a runtime penalty, especially when iterating over rows.
+Moreover, to benefit from typing with Pandera or Patito, you need to instantiate Pydantic objects, which introduces a **runtime penalty**, especially when iterating over rows.
 
-In contrast, Polaroids relies on stub-based typing, meaning there is no runtime penalty. As a result, Polaroids is extremely lightweight, with no dependencies (neither Pandas nor Pydantic).
+In contrast, Polaroids relies on **stub-based typing**, meaning there is no runtime penalty. As a result, Polaroids is extremely **lightweight**, with no dependencies (neither Pandas nor Pydantic).
 
 
 
