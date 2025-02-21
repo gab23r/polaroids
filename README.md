@@ -70,14 +70,14 @@ Pydantic is a great tool, but when validating large Polars DataFrames, it's pref
 
 Moreover, to benefit from typing with Pandera or Patito, you need to instantiate Pydantic objects, which introduces a **runtime penalty**, especially when iterating over rows.
 
-In contrast, Polaroids relies on **stub-based typing**, meaning there is no runtime penalty. As a result, Polaroids is extremely **lightweight**, with no dependencies (neither Pandas nor Pydantic).
+In contrast, polaroids relies on **stub-based typing**, meaning there is no runtime penalty. As a result, polaroids is extremely **lightweight**, with no dependencies (neither Pandas nor Pydantic).
 
 
 
 
 ## Contribution
 
-We welcome contributions to **Polaroids**! Follow these steps to set up your development environment and ensure your changes meet project standards.
+We welcome contributions to **polaroids**! Follow these steps to set up your development environment and ensure your changes meet project standards.
 
 ### 1. Clone the Repository  
 ```bash
