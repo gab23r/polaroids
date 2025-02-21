@@ -17,3 +17,12 @@ class DataFrame(pl.DataFrame, Generic[S]):
 
     @overload
     def rows(self, *, named: Literal[True]) -> list[S]: ...  # type: ignore
+
+    @overload
+    def row(  # type: ignore
+        self,
+        index: int | None = ...,
+        *,
+        by_predicate: pl.Expr | None = ...,
+        named: Literal[True],
+    ) -> S: ...

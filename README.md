@@ -51,10 +51,20 @@ shape: (2, 2)
 └─────┴──────┘
 ```
 
+## Typing Benefits with polaroids
+
+One of the key advantages of polaroids is its strong typing support. You can use classic Polars functions while benefiting from improved type checking and autocompletion in your IDE, reducing runtime errors.
+
+
+```python
+row = df.row(0, named=True)
+row["a"]  # ✅ No issue if "a" exists
+row["not_exists"] # ❌ Type error detected immediately!
+```
 
 ### Comparison with Alternatives
 
-Compared to Pandera and Patito, Polaroids' typing system is based on **TypedDict** rather than Pydantic's BaseModel.
+Compared to Pandera and Patito, polaroids' typing system is based on **TypedDict** rather than Pydantic's BaseModel.
 
 Pydantic is a great tool, but when validating large Polars DataFrames, it's preferable to use **Polars expressions** for efficiency. Given this, a dependency on Pydantic is not particularly relevant.
 
