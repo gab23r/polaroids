@@ -18,17 +18,15 @@ pip install polaroids
 
 📖 **Read the full documentation here:** [Project Documentation](https://gab23r.github.io/polaroids/)
 
-## Usage
+## Basic Usage
 
-### Defining a Schema
-Schemas are defined using Python's `TypedDict`:
 
 ```python
 from typing import Annotated, TypedDict
 from polaroids import DataFrame, Field
 import polars as pl
 
-class BasicSchema(TypedDict):
+class Schema(TypedDict):
     a: Annotated[int, Field(
         sorted="ascending",
         coerce=True,
@@ -37,9 +35,11 @@ class BasicSchema(TypedDict):
     )]
     b: int | None
 
-df = pl.DataFrame({"a": [0.0, 1.0], "b": [None, 0]})
-
-DataFrame[BasicSchema](df).validate()
+(
+    pl.DataFrame({"a": [0.0, 1.0], "b": [None, 0]})   
+    .pipe(DataFrame[Schema]) # <- Add a Schema to your dataframe
+    .validate() # Validate it from the Schema annotations!
+)
 shape: (2, 2)
 ┌─────┬──────┐
 │ a   ┆ b    │
@@ -51,29 +51,17 @@ shape: (2, 2)
 └─────┴──────┘
 ```
 
-### Get typing goodies!
-Get your TypedDict back when you leave polars ✅:
 
-![alt text](docs/img/typing_completion.png)
+### Comparison with Alternatives
+
+Compared to Pandera and Patito, Polaroids' typing system is based on TypedDict rather than Pydantic's BaseModel.
+
+Pydantic is a great tool, but when validating large Polars DataFrames, it's preferable to use Polars expressions for efficiency. Given this, a dependency on Pydantic is not particularly relevant.
+
+Moreover, to benefit from typing with Pandera or Patito, you need to instantiate Pydantic objects, which introduces a runtime penalty, especially when iterating over rows.
+
+In contrast, Polaroids relies on stub-based typing, meaning there is no runtime penalty. As a result, Polaroids is extremely lightweight, with no dependencies (neither Pandas nor Pydantic).
 
 
-### Adding Custom Validations
-Extend `DataFrame` and define validation methods prefixed with `check_`:
-
-```python
-class BasicSchemaDataFrame(DataFrame[BasicSchema]):
-    def check_a_greater_then_b(self) -> None:
-        assert self.select((pl.col("a") >= pl.col("b")).all()).item(), "a should be greater the b"
-
-# Example usage
-BasicSchemaDataFrame(df).validate() # Passes validation
-
-# This will raise an AssertionError
-(
-    pl.DataFrame({"a": [5, 6], "b": [None, 10]})
-    .pipe(BasicSchemaDataFrame)
-    .validate() # This will raise 💣 !
-)
-```
 
 
