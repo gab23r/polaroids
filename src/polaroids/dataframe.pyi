@@ -25,7 +25,6 @@ from polars._typing import (
     PythonDataType,
 )
 
-
 S = TypeVar("S", bound=Mapping)
 
 class DataFrame(pl.DataFrame, Generic[S]):
