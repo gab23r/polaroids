@@ -65,3 +65,35 @@ In contrast, Polaroids relies on **stub-based typing**, meaning there is no runt
 
 
 
+## Contribution
+
+We welcome contributions to **Polaroids**! Follow these steps to set up your development environment and ensure your changes meet project standards.
+
+### 1. Clone the Repository  
+```bash
+git clone git@github.com:gab23r/polaroids.git
+cd polaroids
+```
+
+### 2. Set Up the Environment
+```bash
+uv sync
+```
+
+### 3. Pre-commit Hooks
+```bash
+uv run pre-commit install
+```
+
+To manually run checks before committing:
+
+```bash
+uv run pre-commit run --all-files
+```
+
+### 4. Running Tests
+```bash
+uv run pytest tests
+```
+
+Thanks and Happy coding! 🚀
