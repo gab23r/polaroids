@@ -1,4 +1,4 @@
-# Polars on Steroids!  
+# Polars on steroids!  
 
 This package provides a generic extension to Polars `DataFrame`, allowing data validation and typing goodies.
 
@@ -52,24 +52,5 @@ Get your TypedDict back when you leave polars ✅:
 
 ![alt text](img/typing_completion.png)
 
-
-### Adding Custom Validations
-Extend `DataFrame` and define validation methods prefixed with `check_`:
-
-```python
-class BasicSchemaDataFrame(DataFrame[BasicSchema]):
-    def check_a_greater_then_b(self) -> None:
-        assert self.select((pl.col("a") >= pl.col("b")).all()).item(), "a should be greater the b"
-
-# Example usage
-BasicSchemaDataFrame(df).validate() # Passes validation
-
-# This will raise an AssertionError
-(
-    pl.DataFrame({"a": [5, 6], "b": [None, 10]})
-    .pipe(BasicSchemaDataFrame)
-    .validate() # This will raise 💣 !
-)
-```
 
 

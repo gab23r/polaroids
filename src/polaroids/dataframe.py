@@ -3,7 +3,6 @@
 from collections.abc import Mapping
 from functools import cached_property
 from typing import (
-    Callable,
     Generic,
     Self,
     TypeVar,
@@ -159,10 +158,6 @@ class DataFrame(pl.DataFrame, Generic[S]):
                     )
             self._df = self.with_columns(pl.col(columns).set_sorted(descending=descending))._df
 
-        # Custom checks
-        for name, f in self.__class__.__dict__.items():
-            if name.startswith("check_") and isinstance(f, Callable):
-                f(self)
         return self
 
     @cached_property
