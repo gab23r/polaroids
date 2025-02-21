@@ -5,13 +5,13 @@ build/
 dist/
 wheels/
 *.egg-info
+.env
 
 # Virtual environments
 .venv
 
 #vscode
 .vscode/settings.json
-
 
 # mkdocs
 site/
