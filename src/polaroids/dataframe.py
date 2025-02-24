@@ -9,6 +9,7 @@ from typing import (
 )
 import polars as pl
 from polaroids import _utils
+from polaroids._parse_types import typeddict_to_polats_schema
 from polaroids.exceptions import ValidationError
 from polaroids.field import Field
 
@@ -50,12 +51,13 @@ class DataFrame(pl.DataFrame, Generic[S]):
     ```python
     from typing import Annotated, TypedDict
     from polaroids import DataFrame, Field
+    from polaroids.types import int32
     import polars as pl
 
 
     class BasicSchema(TypedDict):
         a: Annotated[
-            int,
+            int32,
             Field(
                 sorted="ascending",
                 coerce=True,
@@ -215,17 +217,24 @@ class DataFrame(pl.DataFrame, Generic[S]):
 
     @cached_property
     def _schema(self) -> pl.Schema:
-        return _utils.typeddict_to_polats_schema(self._typeddict)
+        return typeddict_to_polats_schema(self._typeddict)
 
     @cached_property
-    def _metadata(self) -> "DataFrame[_Metadata]":
-        return DataFrame[_Metadata](
-            pl.from_dicts(
-                [
-                    {"column": col, "nullable": col in _utils.get_nullable_cols(self._typeddict)}
-                    | getattr(self._typeddict.__annotations__[col], "__metadata__", [{}])[0]
-                    for col in self.columns
-                ],
-                schema=_utils.typeddict_to_polats_schema(_Metadata),
-            ).select("column", "nullable", pl.exclude("column", "nullable"))
-        )
+    def _metadata(self) -> pl.DataFrame:
+        return pl.from_dicts(
+            [
+                {"column": col, "nullable": col in _utils.get_nullable_cols(self._typeddict)}
+                | getattr(self._typeddict.__annotations__[col], "__metadata__", [{}])[0]
+                for col in self.columns
+            ],
+            schema={
+                "primary_key": pl.Boolean,
+                "unique": pl.Boolean,
+                "sorted": pl.Enum(categories=["descending", "ascending"]),
+                "coerce": pl.Boolean,
+                "default": pl.Object,
+                "checks": pl.Object,
+                "column": pl.String,
+                "nullable": pl.Boolean,
+            },
+        ).select("column", "nullable", pl.exclude("column", "nullable"))
