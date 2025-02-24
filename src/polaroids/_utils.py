@@ -1,33 +1,11 @@
 """Utils module."""
 
 from collections.abc import Mapping
-from typing import Any, Literal, TypeVar, get_type_hints
+from typing import TypeVar, get_type_hints
 import polars as pl
-from polars._typing import PolarsDataType
 from polaroids.exceptions import ValidationError
 
 S = TypeVar("S", bound=Mapping)
-
-
-def annotation_to_polars_dtype(annotation: Any) -> PolarsDataType:
-    if hasattr(annotation, "__origin__"):
-        if annotation.__origin__ is Literal:
-            all_string = all(isinstance(arg, str) for arg in annotation.__args__)
-            assert all_string
-            return pl.Enum(annotation.__args__)
-
-    try:
-        return pl.DataType.from_python(annotation)
-    except TypeError:
-        return pl.Object
-
-
-def typeddict_to_polats_schema(typeddict: type[S]) -> pl.Schema:
-    converted = {
-        name: annotation_to_polars_dtype(annotation)
-        for name, annotation in get_type_hints(typeddict).items()
-    }
-    return pl.Schema(converted)
 
 
 def get_nullable_cols(typeddict: type[S]):

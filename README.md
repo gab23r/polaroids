@@ -24,31 +24,42 @@ pip install polaroids
 ```python
 from typing import Annotated, TypedDict
 from polaroids import DataFrame, Field
+from polaroids.types import int8
 import polars as pl
 
+class SubSchema(TypedDict):
+    c: list[bool]
+    d: str
+
 class Schema(TypedDict):
-    a: Annotated[int, Field(
+    a: Annotated[int8, Field(
         sorted="ascending",
         coerce=True,
         unique=True,
         checks=[lambda d: d.ge(0)],
     )]
     b: int | None
+    s: SubSchema
 
-(
-    pl.DataFrame({"a": [0.0, 1.0], "b": [None, 0]})   
+df = (
+    pl.DataFrame({
+        "a": [0.0, 1.0], 
+        "b": [None, 0], 
+        "s": [{"c": [True], "d": "0"}, {"c": [True, False], "d": "1"}]
+    })   
     .pipe(DataFrame[Schema]) # <- Add a Schema to your dataframe
     .validate() # Validate it from the Schema annotations!
 )
-shape: (2, 2)
-┌─────┬──────┐
-│ a   ┆ b    │
-│ --- ┆ ---  │
-│ i64 ┆ i64  │
-╞═════╪══════╡
-│ 0   ┆ null │
-│ 1   ┆ 0    │
-└─────┴──────┘
+df
+shape: (2, 3)
+┌─────┬──────┬─────────────────────┐
+│ a   ┆ b    ┆ s                   │
+│ --- ┆ ---  ┆ ---                 │
+│ i8  ┆ i64  ┆ struct[2]           │
+╞═════╪══════╪═════════════════════╡
+│ 0   ┆ null ┆ {[true],"0"}        │
+│ 1   ┆ 0    ┆ {[true, false],"1"} │
+└─────┴──────┴─────────────────────┘
 ```
 
 ## Typing Benefits with polaroids
@@ -58,7 +69,8 @@ One of the key advantages of polaroids is its strong typing support. You can use
 
 ```python
 row = df.row(0, named=True)
-row["a"]  # ✅ No issue if "a" exists
+row["a"]  # ✅ Type checker agree; resulting type is `int`
+row["s"]["c"][0]  # ✅ Type checker is happy; resulting type is `bool`
 row["not_exists"] # ❌ Type error detected immediately!
 ```
 
