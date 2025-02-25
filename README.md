@@ -38,13 +38,13 @@ class Schema(TypedDict):
         unique=True,
         checks=[lambda d: d.ge(0)],
     )]
-    b: int | None
+    b: Annotated[Literal["blue", "red"] | None, Field(coerce=True)]
     s: SubSchema
 
 df = (
     pl.DataFrame({
         "a": [0.0, 1.0], 
-        "b": [None, 0], 
+        "b": ["blue", None], 
         "s": [{"c": [True], "d": "0"}, {"c": [True, False], "d": "1"}]
     })   
     .pipe(DataFrame[Schema]) # <- Add a Schema to your dataframe
@@ -55,10 +55,10 @@ shape: (2, 3)
 ┌─────┬──────┬─────────────────────┐
 │ a   ┆ b    ┆ s                   │
 │ --- ┆ ---  ┆ ---                 │
-│ i8  ┆ i64  ┆ struct[2]           │
+│ i8  ┆ enum ┆ struct[2]           │
 ╞═════╪══════╪═════════════════════╡
-│ 0   ┆ null ┆ {[true],"0"}        │
-│ 1   ┆ 0    ┆ {[true, false],"1"} │
+│ 0   ┆ blue ┆ {[true],"0"}        │
+│ 1   ┆ null ┆ {[true, false],"1"} │
 └─────┴──────┴─────────────────────┘
 ```
 
@@ -69,7 +69,7 @@ One of the key advantages of polaroids is its strong typing support. You can use
 
 ```python
 row = df.row(0, named=True)
-row["a"]  # ✅ Type checker agree; resulting type is `int`
+row["b"]  # ✅ Type checker agree; resulting type is Literal["blue", "red"] | None
 row["s"]["c"][0]  # ✅ Type checker is happy; resulting type is `bool`
 row["not_exists"] # ❌ Type error detected immediately!
 ```
