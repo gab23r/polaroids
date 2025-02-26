@@ -38,4 +38,5 @@ def assert_schema_equal(left: pl.Schema, right: pl.Schema):
                 l_type = left[name]
                 r_type = right[name]
                 message += f"  {name}: {l_type} != {r_type}\n"
-        raise ValidationError(message)
+        if message:
+            raise ValidationError(message)
