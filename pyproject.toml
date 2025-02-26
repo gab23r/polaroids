@@ -1,6 +1,6 @@
 [project]
 name = "polaroids"
-version = "0.3.0"
+version = "0.3.1"
 description = "Validate you Generic polars dataframes"
 readme = "README.md"
 authors = [
