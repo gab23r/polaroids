@@ -38,8 +38,4 @@ def assert_schema_equal(left: pl.Schema, right: pl.Schema):
                 l_type = left[name]
                 r_type = right[name]
                 message += f"  {name}: {l_type} != {r_type}\n"
-
-        if left.names() != right.names():
-            message += f"column ordering differs: {left.names()} != {right.names()}"
-
         raise ValidationError(message)

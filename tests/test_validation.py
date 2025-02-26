@@ -7,8 +7,6 @@ import polars as pl
 from polaroids import Field
 from polaroids.exceptions import ValidationError
 
-unique = True
-
 
 class BasicSchema(TypedDict):
     a: int

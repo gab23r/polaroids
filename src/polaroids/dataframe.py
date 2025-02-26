@@ -149,6 +149,9 @@ class DataFrame(pl.DataFrame, Generic[S]):
 
         _utils.assert_schema_equal(self._schema, self.schema)
 
+        # Reorder columns
+        self = self.select(self._schema.keys())  # type: ignore
+
         # Nullable
         if non_nullable_cols := self._metadata.filter(~pl.col("nullable"))["column"].to_list():
             if is_null := (
