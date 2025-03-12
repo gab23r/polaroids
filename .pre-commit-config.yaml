@@ -16,3 +16,8 @@ repos:
         entry: uv run pyright
         language: python
         types: [python]
+      - id: pytest
+        name: pytest
+        entry: uv run pytest
+        language: python
+        types: [python]
