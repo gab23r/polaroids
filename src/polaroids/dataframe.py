@@ -11,15 +11,9 @@ import polars as pl
 from polaroids import _utils
 from polaroids._parse_types import typeddict_to_polats_schema
 from polaroids.exceptions import ValidationError
-from polaroids.field import Field
 
 
 S = TypeVar("S", bound=Mapping)
-
-
-class _Metadata(Field):
-    column: str
-    nullable: bool
 
 
 class DataFrame(pl.DataFrame, Generic[S]):
@@ -84,9 +78,6 @@ class DataFrame(pl.DataFrame, Generic[S]):
     ValidationError
         If the DataFrame does not conform to the expected schema.
     """
-
-    def __init__(self, df: pl.DataFrame):
-        super().__init__(df)
 
     def __getattribute__(self, name: str):
         """Dynamically delegate attribute access to the underlying `polars.DataFrame`.
