@@ -3,6 +3,7 @@ name = "polaroids"
 version = "0.3.2"
 description = "Validate you Generic polars dataframes"
 readme = "README.md"
+license = { text = "MIT" } 
 authors = [
     { name = "gabriel", email = "106454081+gab23r@users.noreply.github.com" }
 ]
