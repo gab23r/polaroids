@@ -1,5 +1,5 @@
 from typing import Annotated, Literal, Optional, TypedDict
-from polaroids._parse_types import typeddict_to_polats_schema
+from polaroids._parse_types import typeddict_to_polars_schema
 from polaroids.field import Field
 from polaroids.types import int32
 import polars as pl
@@ -28,7 +28,7 @@ def test_types_parsing() -> None:
             "h": pl.List(pl.Enum(["a", "b"])),
         }
     )
-    assert expected == typeddict_to_polats_schema(Schema)
+    assert expected == typeddict_to_polars_schema(Schema)
 
 
 def test_types_parsing_nested() -> None:
@@ -43,4 +43,4 @@ def test_types_parsing_nested() -> None:
     expected = pl.Schema(
         [("s", pl.List(pl.Struct({"a": pl.Int64, "b": pl.String}))), ("t", pl.Int64)]
     )
-    assert expected == typeddict_to_polats_schema(Schema)
+    assert expected == typeddict_to_polars_schema(Schema)

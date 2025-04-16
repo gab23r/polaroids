@@ -35,7 +35,7 @@ polars_dtype_mapping = {
 S = TypeVar("S", bound=Mapping)
 
 
-def typeddict_to_polats_schema(typeddict: type[S]) -> pl.Schema:
+def typeddict_to_polars_schema(typeddict: type[S]) -> pl.Schema:
     converted = {
         name: parse_into_dtype(annotation) for name, annotation in get_type_hints(typeddict).items()
     }
@@ -54,7 +54,7 @@ def parse_into_dtype(input: Any) -> PolarsDataType:
     if isinstance(input, (UnionType, UnionTypeOld)):
         return _parse_union_type_into_dtype(input)
     elif is_typeddict(input):
-        return pl.Struct(typeddict_to_polats_schema(input))
+        return pl.Struct(typeddict_to_polars_schema(input))
     else:
         return parse_py_type_into_dtype(input)
 

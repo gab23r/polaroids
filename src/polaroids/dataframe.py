@@ -9,7 +9,7 @@ from typing import (
 )
 import polars as pl
 from polaroids import _utils
-from polaroids._parse_types import typeddict_to_polats_schema
+from polaroids._parse_types import typeddict_to_polars_schema
 from polaroids.exceptions import ValidationError
 
 
@@ -211,7 +211,7 @@ class DataFrame(pl.DataFrame, Generic[S]):
 
     @cached_property
     def _schema(self) -> pl.Schema:
-        return typeddict_to_polats_schema(self._typeddict)
+        return typeddict_to_polars_schema(self._typeddict)
 
     @cached_property
     def _metadata(self) -> pl.DataFrame:
