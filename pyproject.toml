@@ -3,14 +3,12 @@ name = "polaroids"
 version = "0.3.2"
 description = "Validate you Generic polars dataframes"
 readme = "README.md"
-license = { text = "MIT" } 
+license = { text = "MIT" }
 authors = [
-    { name = "gabriel", email = "106454081+gab23r@users.noreply.github.com" }
+    { name = "gabriel", email = "106454081+gab23r@users.noreply.github.com" },
 ]
-requires-python = ">=3.11"
-dependencies = [
-    "polars>=1.0",
-]
+requires-python = ">=3.10"
+dependencies = ["polars>=1.0", "typing_extensions>=4.0.0"]
 
 [build-system]
 requires = ["hatchling"]
