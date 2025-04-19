@@ -43,8 +43,7 @@ S = TypeVar("S", bound=Mapping)
 
 def typeddict_to_polars_schema(typeddict: type[S]) -> pl.Schema:
     converted = {
-        name: parse_into_dtype(annotation)
-        for name, annotation in get_type_hints(typeddict).items()
+        name: parse_into_dtype(annotation) for name, annotation in get_type_hints(typeddict).items()
     }
     return pl.Schema(converted)
 

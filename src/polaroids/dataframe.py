@@ -110,9 +110,7 @@ class DataFrame(pl.DataFrame, Generic[S]):
 
             return wrapper
 
-        return super().__getattribute__(
-            name
-        )  # Get the original method from `pl.DataFrame`
+        return super().__getattribute__(name)  # Get the original method from `pl.DataFrame`
 
     def validate(self: Self) -> Self:
         """Validate the dataframe based on the annotations of the TypedDict.
@@ -144,9 +142,7 @@ class DataFrame(pl.DataFrame, Generic[S]):
         self = self.select(self._schema.keys())  # type: ignore
 
         # Nullable
-        if non_nullable_cols := self._metadata.filter(~pl.col("nullable"))[
-            "column"
-        ].to_list():
+        if non_nullable_cols := self._metadata.filter(~pl.col("nullable"))["column"].to_list():
             if is_null := (
                 self.select(pl.col(non_nullable_cols).is_null().any())
                 .transpose(include_header=True, column_names=["is_null"])
@@ -154,9 +150,7 @@ class DataFrame(pl.DataFrame, Generic[S]):
                 .get_column("column")
                 .to_list()
             ):
-                raise ValidationError(
-                    f"The following columns contains nulls: {is_null}."
-                )
+                raise ValidationError(f"The following columns contains nulls: {is_null}.")
 
         # Uniqueness
         if unique_cols := self._metadata.filter(pl.col("unique"))["column"].to_list():
@@ -173,13 +167,9 @@ class DataFrame(pl.DataFrame, Generic[S]):
 
         # Primary key
         if pk_cols := self._metadata.filter(pl.col("primary_key"))["column"].to_list():
-            df_duplicated = self.select(pk_cols).filter(
-                pl.struct(pk_cols).is_duplicated()
-            )
+            df_duplicated = self.select(pk_cols).filter(pl.struct(pk_cols).is_duplicated())
             if df_duplicated.height:
-                raise ValidationError(
-                    f"Primary key constraint violated:\n{df_duplicated}."
-                )
+                raise ValidationError(f"Primary key constraint violated:\n{df_duplicated}.")
 
         # Is sorted
         for descending, columns in (
@@ -197,9 +187,7 @@ class DataFrame(pl.DataFrame, Generic[S]):
 
         # Custom checks
         for column, checks in (
-            self._metadata.select("column", "checks")
-            .filter(pl.col("checks").is_not_null())
-            .rows()
+            self._metadata.select("column", "checks").filter(pl.col("checks").is_not_null()).rows()
         ):
             result = self.select(
                 [check(pl.col(column)).alias(str(i)) for i, check in enumerate(checks)]
