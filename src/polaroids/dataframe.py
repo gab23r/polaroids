@@ -2,16 +2,14 @@
 
 from collections.abc import Mapping
 from functools import cached_property
-from typing import (
-    Generic,
-    Self,
-    TypeVar,
-)
+from typing import Generic, TypeVar
+
 import polars as pl
+from typing_extensions import Self
+
 from polaroids import _utils
 from polaroids._parse_types import typeddict_to_polars_schema
 from polaroids.exceptions import ValidationError
-
 
 S = TypeVar("S", bound=Mapping)
 
@@ -217,7 +215,10 @@ class DataFrame(pl.DataFrame, Generic[S]):
     def _metadata(self) -> pl.DataFrame:
         return pl.from_dicts(
             [
-                {"column": col, "nullable": col in _utils.get_nullable_cols(self._typeddict)}
+                {
+                    "column": col,
+                    "nullable": col in _utils.get_nullable_cols(self._typeddict),
+                }
                 | getattr(self._typeddict.__annotations__[col], "__metadata__", [{}])[0]
                 for col in self.columns
             ],

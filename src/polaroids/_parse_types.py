@@ -3,34 +3,40 @@
 
 # We copied the logic of parsing the python datatype, and our own types in the logic.
 
-from collections.abc import Mapping
 import enum
-from inspect import isclass
-from typing import Any, Literal, NoReturn, TypeVar, Union, get_args, get_type_hints, is_typeddict
-import polars as pl
-
+from collections.abc import Mapping
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal as PyDecimal
-
-from polars._typing import PolarsDataType, PythonDataType
-
+from inspect import isclass
 from types import NoneType, UnionType
+from typing import (
+    Any,
+    Literal,
+    NoReturn,
+    TypeVar,
+    Union,
+    get_args,
+    get_type_hints,
+    is_typeddict,
+)
 
+import polars as pl
+from polars._typing import PolarsDataType, PythonDataType
 
 UnionTypeOld = type(Union[int, str])
 
 
 polars_dtype_mapping = {
-    "int8": pl.Int8,
-    "int16": pl.Int16,
-    "int32": pl.Int32,
-    "int64": pl.Int64,
-    "uint8": pl.UInt8,
-    "uint16": pl.UInt16,
-    "uint32": pl.UInt32,
-    "uint64": pl.UInt64,
-    "float32": pl.Float32,
-    "float64": pl.Float64,
+    "polaroids.types.int8": pl.Int8,
+    "polaroids.types.int16": pl.Int16,
+    "polaroids.types.int32": pl.Int32,
+    "polaroids.types.int64": pl.Int64,
+    "polaroids.types.uint8": pl.UInt8,
+    "polaroids.types.uint16": pl.UInt16,
+    "polaroids.types.uint32": pl.UInt32,
+    "polaroids.types.uint64": pl.UInt64,
+    "polaroids.types.float32": pl.Float32,
+    "polaroids.types.float64": pl.Float64,
 }
 S = TypeVar("S", bound=Mapping)
 
