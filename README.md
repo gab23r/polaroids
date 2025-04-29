@@ -22,7 +22,7 @@ pip install polaroids
 
 
 ```python
-from typing import Annotated, TypedDict
+from typing import Annotated, TypedDict, Literal
 from polaroids import DataFrame, Field
 from polaroids.types import int8
 import polars as pl
@@ -84,7 +84,7 @@ Moreover, to benefit from typing with Pandera or Patito, you need to instantiate
 
 In contrast, polaroids relies on **stub-based typing**, meaning there is no runtime penalty. As a result, polaroids is extremely **lightweight**, with no dependencies (neither Pandas nor Pydantic).
 
-
+> A new alternative was released in April 2025: [dataframely](https://github.com/Quantco/dataframely), it is not based on `Pydantic`, neither `TypedDict`. If you don't need typedicts (via `row`, `rows`, `to_dicts` ...), you should consider using dataframely as it contains more features related to validation.
 
 
 ## Contribution
